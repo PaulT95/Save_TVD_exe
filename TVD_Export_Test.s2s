@@ -1,0 +1,41 @@
+FrontView(ViewFind("Test_with_Brent")); 'Just set the view for a test with old data. Just change via your code
+
+
+FilePathSet("", 0, "Where do you want to save everything?");        'Set The path in the beginning of your test
+
+'Set the NameFiles for all files to export (TVD and Spike/MAT)
+var NameFiles$ := "";
+WriteFileName%();
+Message(NameFiles$);
+
+'Export TVD
+'Run The script.EXE for saving the TVD file automatically with the File Name 
+ProgRun("C:/Users/Paolo/Desktop/SaveECO_MultiUS.exe " + NameFiles$);    'Set the path of where you put the EXE file!
+                                                                'Put ONE space after that! Like "SaveECO.EXE filename"
+
+'Export Spike(Change as you prefer)
+ExportChanList(1); 'Initialise the channel list
+ExportChanList(0, 3011.16, 1,2,4,5,31);
+FileSaveAs(NameFiles$ + ".mat", 100, 0, "", 0, "UseSName=0|UseCName=1|WaveTimes=0|BinFreq=0|BinTimes=0|WaveData=2|MarkAs=1|TMarkAs=2|RMarkAs=2|RMarkData=2|WaveMarkAs=2|WaveMarkData=2|Compat=0|WaveAll=1|WaveSameN=0"); 'Export (string args)
+Message(NameFiles$ + " Saved both TVD and MAT");
+halt;
+
+'DIALOG BOX FOR WRITE FILE NAME **************************************************************************
+'Dialog Box to set up the name for files and Return the NameFiles(global var to initialize outside the func)
+'it will concate it with the Path. Name must not be empty or It won't work. Maybe add a control if you want
+Func WriteFileName%()
+
+    'Dialog box
+    var ok%, item1%, item2$:= "";
+    var xo := -8;  'Space from right edge for slider
+    DlgCreate("Type the file name (without ext)",0,0,100,5);
+    DlgString(2, "File Name (max 100 chars)",100,"",xo,1.5);'String item with max 100char (you can change that)
+    DlgButton(1,"&Ok|Ox70|Tooltip");'button F1+function
+    DlgAllow(0x3ff, 0);  'Allow all, no idle, change function
+    ok% := DlgShow(item1%,item2$);
+
+    'concat Path and File Name 
+    NameFiles$ := FilePath$() + item2$;
+    return 1;
+
+end;
