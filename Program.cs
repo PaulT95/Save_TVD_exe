@@ -35,7 +35,18 @@ Console.WriteLine("EchoWave II instances open: " + EchoWins);
 //    Console.WriteLine("Not any Echo Wave II instances open!");
 //    Console.ReadLine();
 
-EcoObj.SendSaveTVDCommand(filename);
+EcoObj.SendSaveTVDCommand(filename); 
+
+
+//send it to "flush" the memory/cache because with frame line in
+// even if it save the current video saved, it saves bigger and bigger files (probably in background is saved). 
+
+EcoObj.SendFreezeRunCommand(); // Un armed
+EcoObj.SendFreezeRunCommand(); // armed for recording via FrameLine In
+
+Console.WriteLine("Sent the command to flush memory");
+Thread.Sleep(2000); //just time for reading the sentence
+
 // Create a Class EchoWII with DLL needed
 /// <summary>
 /// Class to connect and detect windows, a method SendSaveTVDCommand
@@ -166,6 +177,19 @@ public partial class EchoWII
         return;
     }
 
+    public void SendFreezeRunCommand() //attention because it will do for both. That's okay after saving!
+    {
+        if (hwnd_arr == null)
+            return;
+        String cmd_str;
+
+        cmd_str = "-freezerun";
+
+        for (int i1 = 0; i1 < (hwnd_arr.Count); i1++)
+        {
+            SendString((IntPtr)(hwnd_arr[i1]), 100001, cmd_str);
+        }
+    }
     private string GetDebuggerDisplay()
     {
         return ToString();
