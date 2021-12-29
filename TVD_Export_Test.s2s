@@ -1,4 +1,4 @@
-FrontView(ViewFind("Test_with_Brent")); 'Just set the view for a test with old data. Just change via your code
+FrontView(ViewFind("Test_with_a_human_being")); 'Just set the view for a test with old data. Just change via your code
 
 
 FilePathSet("", 0, "Where do you want to save everything?");        'Set The path in the beginning of your test
